@@ -101,6 +101,23 @@ MyString MyString::str()
 
     return MyString();
 }
+MyString MyString::str()
+{
+    str = "";
+    MyString str1 = str--;
+
+
+    return MyString();
+}
+
+MyString MyString::str()
+{
+    str = "";
+    MyString str1 = --str;
+
+
+    return MyString();
+}
 /// // /// // // /// /// /// /// //
 void MyString::MyStrCat(MyString& cat_str_target) {
     int cat_length = strlen(str) + strlen(cat_str_target.str);
