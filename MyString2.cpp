@@ -17,6 +17,6 @@ int main() {
     MyString my_str = "Helloooooooooooooooooooooo";
     MyString my_str2 = move(my_str);
     MyString::PrintStringsCount();
-
+    MyString::str();
     return 0;
 }
