@@ -1,59 +1,141 @@
 #include "MyString.h"
 #include <iostream>
-
+#include <cstring>
 using namespace std;
 
-MyString::MyString()
-{
-	length = 80;
-	str = new char[length];
+int MyString::strings_count = 0;
+
+void MyString::PrintStringsCount() {
+    cout << "Total number : " << strings_count << endl;
 }
 
-MyString::MyString(int size)
-{
-	length = size;
-	str = new char[length];
+MyString::MyString() {
+    length = 80;
+    str = new char[length];
+    str[0] = '\0';
+    strings_count++;
 }
 
-MyString::MyString(const char* s) //helo
-{
-	length = strlen(s);
-	str = new char[length + 1];
-	strcpy_s(str, length + 1, s);
-}
-MyString::MyString(const MyString& obj) //Konstruktor copy !
-{
-	length = obj.length;
-	str = new char[length + 1];
-	strcpy_s(str, length + 1, obj.str);
+MyString::MyString(int length) {
+    this->length = length;
+    str = new char[length];
+    str[0] = '\0';
+    strings_count++;
 }
 
-MyString::~MyString()
-{
-
-	delete[] str;
+MyString::MyString(const char* str) {
+    if (str == nullptr) {
+        length = 1;
+        this->str = new char[length];
+        this->str[0] = '\0';
+    }
+    else {
+        length = strlen(str);
+        this->str = new char[length + 1];
+        strcpy(this->str, str);
+    }
+    strings_count++;
 }
 
-void MyString::printCount()
-{
-	cout << "count - " << count << endl;
+MyString::MyString(const MyString& target_str) {
+    length = target_str.length;
+    str = new char[length + 1];
+    strcpy(str, target_str.str);
+    strings_count++;
 }
 
-void MyString::Print()
-{
-	cout << str << endl;
+
+void MyString::Print() { cout << str << endl; }
+
+void MyString::MyStrcpy(MyString& target_str) {
+    if (target_str.str == nullptr) {
+        cout << "Invalid copy\n";
+        return;
+    }
+    if (str != nullptr) delete[] str;
+    length = target_str.length;
+    str = new char[length + 1];
+    strcpy(str, target_str.str);
 }
 
-void MyString::input()
-{
+
+bool MyString::MyStrStr(const char* target_str) {
+    char* temp = strstr(str, target_str);
+    if (temp != nullptr) return true;
+    return false;
 }
 
-bool MyString::MyStrStr(const char* st)
+int MyString::MyChr(char target_symbol) {
+    char* found = strchr(str, target_symbol);
+    return found ? (int)(found - str) : -1;
+}
+
+int MyString::MyStrLen() { return strlen(str); }
+
+void MyString::Input() {
+    char temp_str[256];
+    cin.getline(temp_str, 256);
+
+    if (this->str != nullptr) {
+        delete[] this->str;
+    }
+    length = strlen(temp_str);
+    this->str = new char[length + 1];
+    strcpy(this->str, temp_str);
+}
+/// /// /// /// /// // // //
+MyString MyString::str()
 {
-	char* temp = strstr(str, st);
-	if (temp != nullptr)
-	{
-		return true;
-	}
-	return false;
+    str = "";
+    MyString str1 = str++;
+
+
+    return MyString();
+}
+
+MyString MyString::str()
+{
+    str = "";
+    MyString str1 = ++str;
+
+
+    return MyString();
+}
+/// // /// // // /// /// /// /// //
+void MyString::MyStrCat(MyString& cat_str_target) {
+    int cat_length = strlen(str) + strlen(cat_str_target.str);
+    char* cat_str_result = new char[cat_length + 1];
+
+    strcpy(cat_str_result, str);
+    strcat(cat_str_result, cat_str_target.str);
+
+    delete[] str;
+    str = cat_str_result;
+    length = cat_length;
+}
+
+int MyString::MyStrCmp(MyString& cmp_str_target) { return strcmp(this->str, cmp_str_target.str); }
+
+void MyString::MyDelChr(char target_char) {
+    int write_char_index = 0;
+
+    for (int check_char = 0; str[check_char] != '\0'; check_char++) {
+        if (str[check_char] != target_char) {
+            str[write_char_index] = str[check_char];
+            write_char_index++;
+        }
+    }
+
+    str[write_char_index] = '\0';
+}
+
+MyString::~MyString() {
+    delete[] str;
+}
+
+MyString::MyString(MyString&& target_str) {
+    length = target_str.length;
+    target_str.length = 0;
+    str = target_str.str;
+    target_str.str = nullptr;
 }
